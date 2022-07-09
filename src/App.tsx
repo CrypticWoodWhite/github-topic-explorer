@@ -120,6 +120,7 @@ function App() {
         <form
           id="search-form"
           onSubmit={onSubmit}
+          aria-label="Search form"
         >
           <label
             htmlFor="search-bar-input"

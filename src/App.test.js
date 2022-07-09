@@ -1,8 +1,22 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
-});
+describe('github topic explorer', () => {  
+  it("should render the header", () => {
+    render(<App />);
+    const header = screen.getByText("Github topic explorer");
+    expect(header).toBeInTheDocument();
+  })
+  
+  it("sould render the search form", () => {
+    render(<App />);
+    const search = screen.getByRole("form");
+    expect(search).toBeInTheDocument();
+  })
+
+  it("should render the search results title", () => {
+    render(<App />);
+    const results = screen.getByText("Search results");
+    expect(results).toBeInTheDocument();
+  })
+})
