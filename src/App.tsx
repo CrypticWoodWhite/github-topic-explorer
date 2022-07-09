@@ -7,6 +7,10 @@ interface ISearchResults {
   relatedTopics: string[]
 }
 
+interface IRelatedTopics {
+  name: string;
+}
+
 function App() {
   const [ search, setSearch ] = useState("react");
   const [ searchResults, setSearchResults ] = useState<ISearchResults>({topic: "", stargazerCount: 0, relatedTopics: [""]});
@@ -14,6 +18,7 @@ function App() {
 
   const searchTopic = (topic: string) => {
     setError(undefined);
+    const sanitizedTopic = topic.trim().toLowerCase();
 
     fetch("https://api.github.com/graphql", {
       method: 'POST',
@@ -27,7 +32,7 @@ function App() {
           }
         }`,
         variables: {
-          name: topic
+          name: sanitizedTopic
         }
       }),
       headers: {
@@ -38,9 +43,9 @@ function App() {
     }).then(res => res.json()
     ).then(res => {
       const topicResults = res.data.topic;
-      const relatedTopics = topicResults.relatedTopics.map((rt: any) => rt.name);
+      const relatedTopics = topicResults.relatedTopics.map((rt: IRelatedTopics) => rt.name);
       const newResults = {
-        topic,
+        topic: sanitizedTopic,
         stargazerCount: topicResults.stargazerCount,
         relatedTopics
       }
@@ -55,7 +60,7 @@ function App() {
   }, []);
 
   const onChangeSearch = (newVal: string) => {
-    setSearch(newVal.trim().toLowerCase());
+    setSearch(newVal);
   }
 
   const onSubmit = (ev: React.FormEvent<HTMLFormElement>) => {
@@ -83,7 +88,7 @@ function App() {
     return (
       <>
         <h2>Search results</h2>
-        <p className="search-results-subtitle">Topic:</p>
+        <p className="search-results-subtitle">You searched for:</p>
         <p>{searchResults.topic}</p>
         <p className="search-results-subtitle">Stargazers:</p>
         <p>{searchResults.stargazerCount > 0 ? searchResults.stargazerCount : "No one cares :("}</p>
