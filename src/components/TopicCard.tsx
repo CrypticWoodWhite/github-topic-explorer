@@ -1,8 +1,18 @@
 import React from 'react';
 
-function TopicCard() {
+interface TopicCardProps {
+    topic: string;
+    numStargazers: number;
+}
+
+function TopicCard(props: TopicCardProps) {
+    const { topic, numStargazers } = props;
+
     return (
-        <div>Topic</div>
+        <div className="topic-card">
+            <p>Topic: {topic}</p>
+            <p>Stargazers: {numStargazers}</p>
+        </div>
     )
 }
 
