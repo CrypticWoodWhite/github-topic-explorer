@@ -10,7 +10,7 @@ interface ISearchResults {
 
 function App() {
   const [ search, setSearch ] = useState<string>("react");
-  const [ searchResults, setSearchResults ] = useState<ISearchResults>();
+  const [ searchResults, setSearchResults ] = useState<ISearchResults>({topic: "", stargazerCount: 0, relatedTopics: [""]});
   const url = "https://api.github.com/graphql";
 
   const searchTopic = (topic: string) => {
@@ -92,7 +92,7 @@ function App() {
       </div>
       <div className="topics">
         <h2>Search results</h2>
-        <TopicCard topic={search} />
+        <TopicCard {...searchResults} />
       </div>
     </main>
   );
