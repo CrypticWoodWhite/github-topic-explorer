@@ -11,7 +11,7 @@ function App() {
   const [ search, setSearch ] = useState<string>("react");
   const [ searchResults, setSearchResults ] = useState<ISearchResults>({topic: "", stargazerCount: 0, relatedTopics: [""]});
 
-  const searchTopic = () => {
+  const searchTopic = (topic: string) => {
     fetch("https://api.github.com/graphql", {
       method: 'POST',
       body: JSON.stringify({
@@ -24,7 +24,7 @@ function App() {
           }
         }`,
         variables: {
-          name: search
+          name: topic
         }
       }),
       headers: {
@@ -49,7 +49,7 @@ function App() {
   }
 
   useEffect(() => {
-    searchTopic();
+    searchTopic(search);
   }, []);
 
   const onChangeSearch = (newVal: string) => {
@@ -60,7 +60,13 @@ function App() {
 
   const onSubmit = (ev: React.FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
-    searchTopic();
+    searchTopic(search);
+  }
+
+  const onClickRelatedTopic = (ev: React.MouseEvent<HTMLButtonElement>, topic: string) => {
+    ev.preventDefault();
+    setSearch(topic);
+    searchTopic(topic);
   }
 
   return (
@@ -92,7 +98,16 @@ function App() {
         <h2>Search results</h2>
         <p>Topic: {searchResults.topic}</p>
         <p>Stargazers: {searchResults.stargazerCount}</p>
-        <p>Related topics: {searchResults.relatedTopics.join(", ")}</p>
+        <p>Related topics:</p>
+        {
+          searchResults.relatedTopics.map(rt => 
+            <button
+              onClick={ev => onClickRelatedTopic(ev, rt)}
+            >
+              {rt}
+            </button>
+          )
+        }
       </div>
     </main>
   );
