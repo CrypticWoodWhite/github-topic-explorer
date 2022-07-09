@@ -10,8 +10,9 @@ function App() {
     };
   }
 
-  const onClickSearch = () => {
-    console.log("click!")
+  const onClickSearch = (ev: React.MouseEvent<HTMLButtonElement>) => {
+    ev.preventDefault();
+    console.log("click!", search)
   }
 
   return (
@@ -27,9 +28,8 @@ function App() {
             type="search"
             placeholder="React"
             onChange={ev => onChangeSearch(ev.target.value)}
-          >
-            {search}
-          </input>
+            value={search}
+          />
           <button
             type="submit"
             onClick={onClickSearch}
