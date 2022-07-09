@@ -10,7 +10,7 @@ describe('github topic explorer', () => {
   
   it("sould render the search form", () => {
     render(<App />);
-    const search = screen.getByRole("form");
+    const search = screen.getByRole("search");
     expect(search).toBeInTheDocument();
   })
 

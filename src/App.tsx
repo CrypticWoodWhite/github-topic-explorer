@@ -118,9 +118,8 @@ function App() {
       <hr />
       <div className="search-bar">
         <form
-          id="search-form"
           onSubmit={onSubmit}
-          aria-label="Search form"
+          role="search"
         >
           <label
             htmlFor="search-bar-input"
