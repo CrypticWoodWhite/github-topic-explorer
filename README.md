@@ -65,11 +65,12 @@ npm run start
 
 ### Future Improvements
 
-Feel free to elaborate on how you would improve any of the following topics 
-
-* Code Structuring:
+* Testing:
+  * Since we use data from Github's GraphQL API, we need to mock the data to be able to fully test our app. Currently, we are only testing for the static portions of the UI.
 
 * Refactoring:
+  * This is a very small app, so all the code is currently in the `App.tsx` file. We could make the search bar and the search results separate components. This would involve the use of props or React's context hook to manage state.
 
-* Additional Features:
+* UI:
+  * Things look quite basic right now. There are many different ways to improve the UI. One could use a design system such as [Fluent UI](https://developer.microsoft.com/en-us/fluentui#/) or [Material UI](https://mui.com/material-ui/getting-started/overview/), or build an entirely custom UI.
 
