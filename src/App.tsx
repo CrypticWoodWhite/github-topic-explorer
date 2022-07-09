@@ -11,10 +11,9 @@ interface ISearchResults {
 function App() {
   const [ search, setSearch ] = useState<string>("react");
   const [ searchResults, setSearchResults ] = useState<ISearchResults>({topic: "", stargazerCount: 0, relatedTopics: [""]});
-  const url = "https://api.github.com/graphql";
 
-  const searchTopic = (topic: string) => {
-    fetch(url, {
+  const searchTopic = () => {
+    fetch("https://api.github.com/graphql", {
       method: 'POST',
       body: JSON.stringify({
         query: `query ($name:String!) {
@@ -26,7 +25,7 @@ function App() {
           }
         }`,
         variables: {
-          name: topic
+          name: search
         }
       }),
       headers: {
@@ -51,7 +50,7 @@ function App() {
   }
 
   useEffect(() => {
-    searchTopic(search);
+    searchTopic();
   }, []);
 
   const onChangeSearch = (newVal: string) => {
@@ -62,7 +61,7 @@ function App() {
 
   const onSubmit = (ev: React.FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
-    searchTopic(search);
+    searchTopic();
   }
 
   return (
@@ -90,9 +89,11 @@ function App() {
           </button>
         </form>
       </div>
-      <div className="topics">
+      <div className="search-results">
         <h2>Search results</h2>
-        <TopicCard {...searchResults} />
+        <p>Topic: {searchResults.topic}</p>
+        <p>Stargazers: {searchResults.stargazerCount}</p>
+        <p>Related topics: {searchResults.relatedTopics.join(", ")}</p>
       </div>
     </main>
   );
