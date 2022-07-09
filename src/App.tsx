@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import TopicCard from "./components/TopicCard";
 import "./App.css";
 
 interface ISearchResults {
