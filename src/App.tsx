@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
 
 function App() {
   const [ search, setSearch ] = useState<string>("");
+  const url = "https://api.github.com/graphql";
 
   const onChangeSearch = (newVal: string) => {
     if (newVal) {
@@ -10,18 +11,36 @@ function App() {
     };
   }
 
-  const onClickSearch = (ev: React.MouseEvent<HTMLButtonElement>) => {
+  const onSubmit = (ev: React.FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
-    console.log("click!", search)
+
+    fetch(url, {
+      method: 'GET',
+      body: JSON.stringify({
+        query: `query ($type: String) {
+        }`,
+        variables: {
+          type: ''
+        }
+      }),
+      headers: {
+        Authorization: `bearer ${
+          process.env.REACT_APP_GITHUB_API_TOKEN
+        }`,
+      }
+    })
   }
 
   return (
     <main className="App">
       <header>
-        Github topic explorer
+        <h1>Github topic explorer</h1>
       </header>
       <div className="search">
-        <form id="search-form">
+        <form
+          id="search-form"
+          onSubmit={onSubmit}
+        >
           <label htmlFor="search-bar-input">Search</label>
           <input
             id="search-bar-input"
@@ -32,14 +51,13 @@ function App() {
           />
           <button
             type="submit"
-            onClick={onClickSearch}
           >
             Search
           </button>
         </form>
       </div>
       <div className="topics">
-
+        <h2>Search results</h2>
       </div>
     </main>
   );
