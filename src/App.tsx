@@ -1,19 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import TopicCard from "./components/TopicCard";
 import "./App.css";
+
+interface ISearchResults {
+  topic: string,
+  stargazerCount: number,
+  relatedTopics: string[]
+}
 
 function App() {
   const [ search, setSearch ] = useState<string>("react");
+  const [ searchResults, setSearchResults ] = useState<ISearchResults>();
   const url = "https://api.github.com/graphql";
 
-  const onChangeSearch = (newVal: string) => {
-    if (newVal) {
-      setSearch(newVal.trim().toLowerCase());
-    };
-  }
-
-  const onSubmit = (ev: React.FormEvent<HTMLFormElement>) => {
-    ev.preventDefault();
-
+  const searchTopic = (topic: string) => {
     fetch(url, {
       method: 'POST',
       body: JSON.stringify({
@@ -26,7 +26,7 @@ function App() {
           }
         }`,
         variables: {
-          name: search
+          name: topic
         }
       }),
       headers: {
@@ -34,13 +34,35 @@ function App() {
           process.env.REACT_APP_GITHUB_API_TOKEN
         }`,
       }
-    }).then(res => {
-      console.log("res", res.json());
-      // do something with res
+    }).then(res => res.json()
+    ).then(res => {
+      const topicResults = res.data.topic;
+      const relatedTopics = topicResults.relatedTopics.map((rt: any) => rt.name);
+      const newResults = {
+        topic: search,
+        stargazerCount: topicResults.stargazerCount,
+        relatedTopics
+      }
+      setSearchResults(newResults);
     }).catch(err => {
       console.log("err", err);
       // do something with err
     })
+  }
+
+  useEffect(() => {
+    searchTopic(search);
+  }, []);
+
+  const onChangeSearch = (newVal: string) => {
+    if (newVal) {
+      setSearch(newVal.trim().toLowerCase());
+    };
+  }
+
+  const onSubmit = (ev: React.FormEvent<HTMLFormElement>) => {
+    ev.preventDefault();
+    searchTopic(search);
   }
 
   return (
@@ -70,6 +92,7 @@ function App() {
       </div>
       <div className="topics">
         <h2>Search results</h2>
+        <TopicCard topic={search} />
       </div>
     </main>
   );

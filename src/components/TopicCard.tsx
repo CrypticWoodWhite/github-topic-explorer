@@ -2,8 +2,8 @@ import React from 'react';
 
 interface TopicCardProps {
     topic: string;
-    numStargazers: number;
-    relatedTopics: any;
+    numStargazers?: number;
+    relatedTopics?: any;
 }
 
 function TopicCard(props: TopicCardProps) {
