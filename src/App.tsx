@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./App.css";
 
 function App() {
-  const [ search, setSearch ] = useState<string>("");
+  const [ search, setSearch ] = useState<string>("react");
   const url = "https://api.github.com/graphql";
 
   const onChangeSearch = (newVal: string) => {
@@ -15,12 +15,18 @@ function App() {
     ev.preventDefault();
 
     fetch(url, {
-      method: 'GET',
+      method: 'POST',
       body: JSON.stringify({
-        query: `query ($type: String) {
+        query: `query ($name:String!) {
+          topic(name: $name) {
+            relatedTopics(first: 10) {
+                name
+            },
+            stargazerCount
+          }
         }`,
         variables: {
-          type: ''
+          name: search
         }
       }),
       headers: {
@@ -28,6 +34,12 @@ function App() {
           process.env.REACT_APP_GITHUB_API_TOKEN
         }`,
       }
+    }).then(res => {
+      console.log("res", res.json());
+      // do something with res
+    }).catch(err => {
+      console.log("err", err);
+      // do something with err
     })
   }
 
