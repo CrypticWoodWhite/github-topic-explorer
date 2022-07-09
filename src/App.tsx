@@ -37,7 +37,7 @@ function App() {
       const topicResults = res.data.topic;
       const relatedTopics = topicResults.relatedTopics.map((rt: any) => rt.name);
       const newResults = {
-        topic: search,
+        topic,
         stargazerCount: topicResults.stargazerCount,
         relatedTopics
       }
